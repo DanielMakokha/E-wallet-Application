@@ -1,4 +1,18 @@
 // I wish you good luck and happy coding 🥰🤠🥳🥳💯💯
+function getformattedTime(){
+  const now=new Date().toLocaleTimeString('en-us',{
+    month: 'short',
+    day:'numeric',
+    hour:'2-digit',
+    minute:'2-digit',
+    
+  });
+  const date=now.split(',')[0].split(' ');
+  const time=now.split(',')[1];
+  return `${date[1]} ${date[0]},${time}`
+  
+}
+
 document.querySelector('#ewallet-form').addEventListener('submit',function(e){
     e.preventDefault();
 
@@ -18,6 +32,7 @@ document.querySelector('#ewallet-form').addEventListener('submit',function(e){
 
 })
 function addItems(type,desc,value){
+  const time=getformattedTime()
   const newhtml=`
     <div class="item">
           <div class="item-description-time">
@@ -25,7 +40,7 @@ function addItems(type,desc,value){
               <p>${desc}</p>
             </div>
             <div class="item-time">
-              <p>25 Feb, 06:45 PM</p>
+              <p>${time}</p>
             </div>
           </div>
           <div class="item-amount ${type==='+' ? 'income-amount' : 'expense-amount'}">
