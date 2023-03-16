@@ -31,6 +31,7 @@ document.querySelector('#ewallet-form').addEventListener('submit',function(e){
     
 
 });
+showItems();
 function showItems() {
   let items=getItemsfromLS();
   const collection=document.querySelector('.collection');
@@ -80,6 +81,9 @@ function addItems(type,desc,value){
     const collection=document.querySelector('.collection');
     collection.insertAdjacentHTML('afterbegin',newhtml);
     addItemToLS(type,desc,value,time);
+    showTotalIncome();
+    showTotalExpense();
+    showTotalBalance();
 };
 
 function resetForm(){
@@ -101,4 +105,48 @@ function addItemToLS(type,desc,value,time){
 let items=getItemsfromLS();
 items.push({desc,time,type,value,});
 localStorage.setItem('items',JSON.stringify(items));
+}
+showTotalIncome();
+function showTotalIncome(){
+  let items=getItemsfromLS();
+  let totalIncome=0;
+  for(let item of items){
+    if(item.type==='+')
+      totalIncome += parseInt(item.value);
+  }
+  console.log(totalIncome);
+  document.querySelector('.income__amount p').innerText = `$${totalIncome}`
+}
+showTotalExpense()
+function showTotalExpense(){
+  let items=getItemsfromLS();
+  let totalExpense=0;
+  for(let item of items){
+    if(item.type==='-')
+      totalExpense += parseInt(item.value);
+  }
+  console.log(totalExpense);
+  document.querySelector('.expense__amount p').innerText = `$${totalExpense}`
+}
+showTotalBalance();
+function showTotalBalance(){
+  let items=getItemsfromLS();
+  let balance=0;
+  for(let item of items){
+    if(item.type==='+'){
+      balance += parseInt(item.value);
+    }else{
+      balance =+ parseInt(item.value);
+       }
+  }
+  document.querySelector('.balance__amount p').innerText = balance;
+
+  if (balance >= 0) {
+    document.querySelector('header').className = 'green';
+
+  }
+  else{
+    document.querySelector('header').className = 'red';
+  }
+
 }
