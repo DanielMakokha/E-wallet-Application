@@ -30,7 +30,32 @@ document.querySelector('#ewallet-form').addEventListener('submit',function(e){
     }
     
 
-})
+});
+function showItems() {
+  let items=getItemsfromLS();
+  const collection=document.querySelector('.collection');
+  
+
+  for (let item of items){
+    const newhtml=`
+    <div class="item">
+          <div class="item-description-time">
+            <div class="item-description">
+              <p>${item.desc}</p>
+            </div>
+            <div class="item-time">
+              <p>${item.time}</p>
+            </div>
+          </div>
+          <div class="item-amount ${item.type==='+' ? 'income-amount' : 'expense-amount'}">
+            <p>${item.type}$${item.value}</p>
+          </div>
+        </div>
+
+    `;
+    collection.insertAdjacentHTML('afterbegin',newhtml);
+  }
+}
 function addItems(type,desc,value){
   const time=getformattedTime()
   const newhtml=`
@@ -54,6 +79,7 @@ function addItems(type,desc,value){
     console.log(newhtml);
     const collection=document.querySelector('.collection');
     collection.insertAdjacentHTML('afterbegin',newhtml);
+    addItemToLS(type,desc,value,time);
 };
 
 function resetForm(){
@@ -61,18 +87,18 @@ function resetForm(){
     document.querySelector('.add__description').value='';
     document.querySelector('.add__value').value='';
 };
-/*
-<div class="item">
-          <div class="item-description-time">
-            <div class="item-description">
-              <p>Buy a physics book</p>
-            </div>
-            <div class="item-time">
-              <p>25 Feb, 06:45 PM</p>
-            </div>
-          </div>
-          <div class="item-amount expense-amount">
-            <p>-$78</p>
-          </div>
-        </div>
-*/
+function getItemsfromLS(){
+  let items=localStorage.getItem('items')
+if(items){
+  items=JSON.parse(items);
+}else{
+  items=[];
+}
+return items;
+}
+
+function addItemToLS(type,desc,value,time){
+let items=getItemsfromLS();
+items.push({desc,time,type,value,});
+localStorage.setItem('items',JSON.stringify(items));
+}
